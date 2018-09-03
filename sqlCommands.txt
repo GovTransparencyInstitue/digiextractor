@@ -1,0 +1,212 @@
+
+create table contracts (
+	id serial primary key,
+	gobierno varchar,
+	siglas varchar,
+	dependencia varchar,
+	claveuc varchar,
+	nombre_de_la_uc varchar(1000),
+	responsable varchar,
+	codigo_expediente varchar,
+	titulo_expediente varchar(1000),
+	plantilla_expediente varchar,
+	numero_procedimiento varchar,
+	expffallo varchar,
+	procfpublicacion varchar,
+	fecha_apertura_proposiciones varchar,
+	caracter varchar,
+	tipo_contratacion varchar,
+	tipo_procedimiento varchar,
+	forma_procedimiento varchar,
+	codigo_contrato varchar,
+	titulo_contrato varchar(1000),
+	fecha_inicio varchar,
+	fecha_fin varchar,
+	importe_contrato varchar,
+	moneda varchar,
+	estatus_contrato varchar,
+	archivado varchar,
+	convenio_modificatorio varchar,
+	ramo varchar,
+	clave_programa varchar,
+	aportacion_federal varchar,
+	fecha_celebracion varchar,
+	contrato_macro varchar,
+	identificador_cm varchar,
+	compra_consolidada varchar,
+	plurianual varchar,
+	clave_cartera_shcp varchar,
+	estratificacion_muc varchar,
+	folio_rupc varchar,
+	proveendor_contratista varchar(1000),
+	estratificacion_mpc varchar,
+	siglas_pais varchar,
+	estatus_empresa varchar,
+	cuenta_administrada_por varchar,
+	c_externo varchar,
+	organizmo varchar,
+	anuncio varchar
+);
+
+
+copy contact (
+	gobierno,
+	siglas,
+	dependencia,
+	claveuc,
+	nombre_de_la_uc,
+	responsable,
+	codigo_expediente,
+	titulo_expediente,
+	plantilla_expediente,
+	numero_procedimiento,
+	expffallo,
+	procfpublicacion,
+	fecha_apertura_proposiciones,
+	caracter,
+	tipo_contratacion,
+	tipo_procedimiento,
+	forma_procedimiento,
+	codigo_contrato,
+	titulo_contrato,
+	fecha_inicio,
+	fecha_fin,
+	importe_contrato,
+	moneda,
+	estatus_contrato,
+	archivado,
+	convenio_modificatorio,
+	ramo,
+	clave_programa,
+	aportacion_federal,
+	fecha_celebracion,
+	contrato_macro,
+	identificador_mc,
+	compra_consolidada,
+	plurianual,
+	clave_cartera_shcp,
+	estratificacion_muc,
+	folio_rupc,
+	proveendor_contratista,
+	estratificacion_mpc,
+	siglas_pais,
+	estatus_empresa,
+	cuenta_administrada_por,
+	c_externo,
+	organizmo,
+	anuncio);
+from '/input/datafile.csv' delimiter ',' csv header;
+
+
+create table company_siem (
+	id serial primary key,
+	razon_social varchar,
+	estado varchar,
+	municipio varchar,
+	domicilio varchar,
+	colonia varchar,
+	codigo_postal varchar,
+	telefono varchar,
+	correo varchar,
+	giro varchar,
+	scian varchar,
+	rango_empleados,
+	registrado_por,
+);
+
+
+copy company_siem (
+	razon_social,
+	estado,
+	municipio,
+	domicilio,
+	colonia,
+	codigo_postal,
+	telefono,
+	correo,
+	giro,
+	scian,
+	rango_empleados,
+	registrado_por)
+from '/input/siem.csv' delimiter ',' csv header;
+
+
+create table state_institution (
+	id serial primary key,
+	ramo varchar,
+	institucion varchar,
+	siglas varchar,
+	clave_uc varchar,
+	nombre_uc varchar,
+	rfc_uc varchar,
+	responsable varchar,
+	entidad_federativa varchar,
+	zona_horaria varchar,
+	telefono varchar,
+);
+
+
+copy state_institution (
+	id,
+	ramo,
+	institucion,
+	siglas,
+	clave_uc,
+	nombre_uc,
+	rfc_uc,
+	responsable,
+	entidad_federativa,
+	zona_horaria,
+	telefono)
+from '/input/UC_180731115031.csv' delimiter ',' csv header;
+
+
+
+CREATE TABLE digiwhist_parse_raw.raw_json_with_tender_id (
+	tender_id text NULL,
+	raw_data jsonb NULL
+);
+CREATE INDEX raw_json_with_tender_id_tender_id_idx ON digiwhist_parse_raw.raw_json_with_tender_id USING btree (tender_id);
+
+
+CREATE OR REPLACE FUNCTION json_array_map(json_arr jsonb, path TEXT[]) RETURNS jsonb[]
+LANGUAGE plpgsql IMMUTABLE AS $$
+DECLARE
+	rec jsonb;
+	len int;
+	ret jsonb[];
+BEGIN
+	-- If json_arr is not an array, return an empty array as the result
+	BEGIN
+		len := jsonb_array_length(json_arr);
+	EXCEPTION
+		WHEN OTHERS THEN
+			RETURN ret;
+	END;
+
+	-- Apply mapping in a loop
+	FOR rec IN SELECT jsonb_array_elements#>path FROM jsonb_array_elements(json_arr)
+	LOOP
+		ret := array_append(ret,rec);
+	END LOOP;
+	RETURN ret;
+END $$;
+
+SELECT DISTINCT unnest(json_array_map(jsonb_array_elements(jsonb_extract_path(jdata,'records'))#>'{releases}', '{tender}'::text[]))->>'id' AS "id", jdata as raw_data FROM import.raw_json;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

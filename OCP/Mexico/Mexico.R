@@ -1,13 +1,13 @@
 #clean all Contratos files
 
 #set directory
-setwd("C:/Users/Bertold/Downloads/mexico_contratos")
+setwd("C:/Users/Bertold/Downloads/mexico_contratos/")
 getwd()
 
 #checking current memory limit
 memory.limit()
 #setting a bigger one
-memory.limit(20000)
+memory.limit(30000)
 
 
 #contratos2018
@@ -1595,3 +1595,30 @@ summary(df_contr_ocds_sel$rec_com_aw_vamount)
 
 #save file
 write.csv(df_contr_ocds_sel, file = "C:/Users/Bertold/Downloads/mexico_contratos/flattened-raw/raw_merge/df_contr_ocds_sel.csv", row.names = FALSE)
+
+
+###############################
+
+#adding number of tenderers
+
+library(dplyr)
+tend_count <- rec_com_ten_tenderers %>%
+  group_by(rec_com_ten_id) %>%
+  mutate(count = n_distinct(rec_com_ten_tenderers_id))
+
+write.csv(tend_count, file = "C:/Users/Bertold/Downloads/mexico_contratos/flattened-raw/raw_merge/tend_count.csv", row.names = FALSE)
+
+tend_count1 <- tend_count
+tend_count1 <- tend_count[c("rec_com_ten_id", "count")]
+tend_count1 <- tend_count1[!duplicated(tend_count1),]
+
+#add this information to the combined file
+df_contr_ocds_ten <- merge(df_contr_ocds_sel, tend_count1, by = "rec_com_ten_id", all.x = T)
+length(which(!is.na(df_contr_ocds_ten$count)))
+summary(df_contr_ocds_ten$count)
+
+df_contr_ocds_ten$rec_com_ten_nrOfTenderers <- df_contr_ocds_ten$count
+df_contr_ocds_ten$count <- NULL
+
+#save file
+write.csv(df_contr_ocds_ten, file = "C:/Users/Bertold/Downloads/mexico_contratos/flattened-raw/raw_merge/df_contr_ocds_ten.csv", row.names = FALSE)

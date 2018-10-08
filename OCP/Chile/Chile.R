@@ -12,6 +12,9 @@ library(readr)
 
 df_chile <- read_csv('2018-09-20-chile.csv')
 
+#alternatively with Latin-1 encoding
+df_chile <- read.csv("C:/Users/Bertold/Downloads/2018-09-20-chile/2018-09-20-chile.csv", header = TRUE, sep = ",", encoding = "Latin-1")
+
 
 #check missings
 sapply(df_chile, function(df_chile) sum(is.na(df_chile)))
@@ -24,7 +27,7 @@ names(df_chile)
 
 #remove additional unnecessary variables
 df_chile <- df_chile[,-c(4,29,30,35,36,37,38,39,40,41,42)]
-
+df_chile2018$tender_documents_count <- NULL
 
 #check missing values
 sapply(df_chile, function(df_chile) sum(is.na(df_chile)))
@@ -52,30 +55,41 @@ df_chile2018$lot_estimatedprice <- as.numeric(df_chile2018$lot_estimatedprice)
 df_chile2018$tender_finalprice <- as.numeric(df_chile2018$tender_finalprice)
 df_chile2018$bid_price <- as.numeric(df_chile2018$bid_price)
 
+#rename variables to OCDS
+library(data.table)
+setnames(df_chile2018, old = c('tender_id','tender_title', 'tender_proceduretype', 'tender_lotscount', 'tender_recordedbidscount', 'tender_cpvs', 'tender_maincpv', 'tender_awardcriteria_count','tender_estimatedprice','tender_finalprice','lot_estimatedprice','bid_price','tender_corrections_count','lot_title','buyer_id','buyer_masterid','buyer_name','buyer_email','buyer_contactname','buyer_city','bidder_id','bidder_masterid','bidder_name','bid_iswinning','award_count','notice_count','tender_publications_firstdcontractawarddate','tender_year','savings','tender_description_length','currency','ID','ca_id'), new = c('ten_id', 'ten_title','ten_procMethod','ten_item_quantity','ten_bids','ten_item_class_id','dropcpv','ten_aw_crit_count', 'ten_plan_vamount', 'ten_vamount', 'ten_item_plan_vamount', 'ten_item_unit_vamount', 'ten_am_count', 'ten_item_descr', 'buyer_id', 'buyer_addid', 'buyer_name', 'dropemail', 'dropconname', 'buyer_add_city', 'ten_tenderers_id', 'ten_tenderers_addid', 'ten_tenderers_name', 'aw_status', 'aw_count', 'notice_count', 'aw_date', 'ten_year', 'savings', 'ten_descr_length', 'ten_vcurr', 'ID', 'ca_id'))
+names(df_chile2018)
+
+#drop unnecessary variables
+df_chile2018$dropcpv <- NULL
+df_chile2018$dropemail <- NULL
+df_chile2018$dropconname <- NULL
+
+
 #check missing values
 sapply(df_chile2018, function(df_chile2018) sum(is.na(df_chile2018)))
 
-mean(is.na(df_chile2018$tender_proceduretype))
+mean(is.na(df_chile2018$ten_procMethod))
 #0.4%
-mean(is.na(df_chile2018$tender_estimatedprice))
+mean(is.na(df_chile2018$ten_plan_vamount))
 #17%
-mean(is.na(df_chile2018$bid_price))
+mean(is.na(df_chile2018$ten_item_unit_vamount))
 #77%
-mean(is.na(df_chile2018$bidder_id))
+mean(is.na(df_chile2018$ten_tenderers_id))
 #4.3%
-mean(is.na(df_chile2018$bid_iswinning))
+mean(is.na(df_chile2018$aw_status))
 #4.3%
-mean(is.na(df_chile2018$tender_publications_firstdcontractawarddate))
+mean(is.na(df_chile2018$aw_date))
 #3.4%
-mean(is.na(df_chile2018$tender_id))
+mean(is.na(df_chile2018$ten_id))
 #0%
 mean(is.na(df_chile2018$buyer_id))
 #0.4%
-mean(is.na(df_chile2018$bidder_name))
+mean(is.na(df_chile2018$ten_tenderers_name))
 #4.3%
 mean(is.na(df_chile2018$buyer_name))
 #0.4%
-mean(is.na(df_chile2018$tender_finalprice))
+mean(is.na(df_chile2018$ten_vamount))
 #17%
 
 
@@ -85,14 +99,14 @@ table(df_chile2018$bid_iswinning)
 #use bid_price instead that is the final value amount of the awarded contracts
 #although it has a high missing rate, it is still the best alternative to define winners
 
-df_chile2018$winner <- ifelse(!is.na(df_chile2018$bid_price), "winner", NA)
+df_chile2018$winner <- ifelse(!is.na(df_chile2018$ten_item_unit_vamount), "winner", NA)
 sum(is.na(df_chile2018$winner))
 #only 23% are winners
 
 #tenders
-length(unique(df_chile2018$tender_id))
+length(unique(df_chile2018$ten_id))
 #16197 unique tenders
-length(unique(df_chile2018$bidder_id))
+length(unique(df_chile2018$ten_tenderers_id))
 #only 9695 unique bidders
 
 #unique variable
@@ -101,24 +115,24 @@ length(unique(df_chile2018$ca_id))
 
 #generate unique id for contracts
 df_chile2018$ID <- rownames(df_chile2018)
-df_chile2018$tender_id1 <- df_chile2018$tender_id
+df_chile2018$ten_id1 <- df_chile2018$ten_id
 
-df_chile2018$ca_id <- make.unique(as.character(df_chile2018$tender_id1), sep = "_")
+df_chile2018$ca_id <- make.unique(as.character(df_chile2018$ten_id1), sep = "_")
 length(unique(df_chile2018$ca_id))
 
-df_chile2018$tender_id1 <- NULL
-df_chile2018$tender_documents_count <- NULL
+df_chile2018$ten_id1 <- NULL
+
 
 #remove outliers from bid price
-df_chile2018$tender_finalprice[df_chile2018$tender_finalprice < 237836] <- NA
-df_chile2018$tender_finalprice[df_chile2018$tender_finalprice > 7923065708812] <- NA
-sum(is.na(df_chile2018$tender_finalprice))
+df_chile2018$ten_vamount[df_chile2018$ten_vamount < 237836] <- NA
+df_chile2018$ten_vamount[df_chile2018$ten_vamount > 7923065708812] <- NA
+sum(is.na(df_chile2018$ten_vamount))
 #40466
-mean(is.na(df_chile2018$tender_finalprice))
+mean(is.na(df_chile2018$ten_vamount))
 #22%
 
 #tender_proceduretype
-table(df_chile2018$tender_proceduretype)
+table(df_chile2018$ten_procMethod)
 #mostly open
 
 #save file

@@ -15,6 +15,10 @@ memory.limit(30000)
 #Contratos2018
 df_contr18 <- read.csv("C:/Users/Bertold/Downloads/mexico_contratos/Contratos2018_csv.csv", header = TRUE, sep = ";")
 
+#alternatively with Latin-1 encoding
+df_contr18 <- read.csv("C:/Users/Bertold/Downloads/mexico_contratos/Contratos2018_csv.csv", header = TRUE, sep = ";", encoding = "Latin-1")
+
+
 #keeping the ones we need
 myvars <- c('DEPENDENCIA', 'CLAVEUC','CODIGO_EXPEDIENTE','TITULO_EXPEDIENTE','PLANTILLA_EXPEDIENTE','NUMERO_PROCEDIMIENTO','PROC_F_PUBLICACION','FECHA_APERTURA_PROPOSICIONES', 'TIPO_CONTRATACION', 'CODIGO_CONTRATO', 'TITULO_CONTRATO', 'FECHA_INICIO', 'FECHA_FIN', 'IMPORTE_CONTRATO', 'MONEDA', 'ESTATUS_CONTRATO', 'APORTACION_FEDERAL', 'FECHA_CELEBRACION', 'FOLIO_RUPC', 'PROVEEDOR_CONTRATISTA', 'ANUNCIO')
 df_contr18 <- df_contr18[myvars]
@@ -74,6 +78,10 @@ write.csv(df_contr18, file = "Contratos2018_csv_new.csv")
 #Contratos2017
 df_contr17 <- read.csv("C:/Users/Bertold/Downloads/mexico_contratos/Contratos2017_csv.csv", header = TRUE, sep = ";")
 
+#alternatively with Latin-1 encoding
+df_contr17 <- read.csv("C:/Users/Bertold/Downloads/mexico_contratos/Contratos2017_csv.csv", header = TRUE, sep = ";", encoding = "Latin-1")
+
+
 #keeping the ones we need
 myvars <- c('DEPENDENCIA', 'CLAVEUC','CODIGO_EXPEDIENTE','TITULO_EXPEDIENTE','PLANTILLA_EXPEDIENTE','NUMERO_PROCEDIMIENTO','PROC_F_PUBLICACION','FECHA_APERTURA_PROPOSICIONES', 'TIPO_CONTRATACION', 'CODIGO_CONTRATO', 'TITULO_CONTRATO', 'FECHA_INICIO', 'FECHA_FIN', 'IMPORTE_CONTRATO', 'MONEDA', 'ESTATUS_CONTRATO', 'APORTACION_FEDERAL', 'FECHA_CELEBRACION', 'FOLIO_RUPC', 'PROVEEDOR_CONTRATISTA', 'ANUNCIO')
 df_contr17 <- df_contr17[myvars]
@@ -127,6 +135,10 @@ write.csv(df_contr17, file = "Contratos2017_csv_new.csv")
 
 #Contratos2016
 df_contr16 <- read.csv("C:/Users/Bertold/Downloads/mexico_contratos/Contratos2016_csv.csv", header = TRUE, sep = ";")
+
+#alternatively with Latin-1 encoding
+df_contr16 <- read.csv("C:/Users/Bertold/Downloads/mexico_contratos/Contratos2016_csv.csv", header = TRUE, sep = ";", encoding = "Latin-1")
+
 
 #keeping the ones we need
 myvars <- c('DEPENDENCIA', 'CLAVEUC','CODIGO_EXPEDIENTE','TITULO_EXPEDIENTE','PLANTILLA_EXPEDIENTE','NUMERO_PROCEDIMIENTO','PROC_F_PUBLICACION','FECHA_APERTURA_PROPOSICIONES', 'TIPO_CONTRATACION', 'CODIGO_CONTRATO', 'TITULO_CONTRATO', 'FECHA_INICIO', 'FECHA_FIN', 'IMPORTE_CONTRATO', 'MONEDA', 'ESTATUS_CONTRATO', 'APORTACION_FEDERAL', 'FECHA_CELEBRACION', 'FOLIO_RUPC', 'PROVEEDOR_CONTRATISTA', 'ANUNCIO')
@@ -184,6 +196,10 @@ library(readr)
 
 #Contratos2015
 df_contr15 <- read.csv("C:/Users/Bertold/Downloads/mexico_contratos/Contratos2015_csv.csv", header = TRUE, sep = ";")
+
+#alternatively with Latin-1 encoding
+df_contr15 <- read.csv("C:/Users/Bertold/Downloads/mexico_contratos/Contratos2015_csv.csv", header = TRUE, sep = ";", encoding = "Latin-1")
+
 
 #keeping the ones we need
 myvars <- c('DEPENDENCIA', 'CLAVEUC','CODIGO_EXPEDIENTE','TITULO_EXPEDIENTE','PLANTILLA_EXPEDIENTE','NUMERO_PROCEDIMIENTO','PROC_F_PUBLICACION','FECHA_APERTURA_PROPOSICIONES', 'TIPO_CONTRATACION', 'CODIGO_CONTRATO', 'TITULO_CONTRATO', 'FECHA_INICIO', 'FECHA_FIN', 'IMPORTE_CONTRATO', 'MONEDA', 'ESTATUS_CONTRATO', 'APORTACION_FEDERAL', 'FECHA_CELEBRACION', 'FOLIO_RUPC', 'PROVEEDOR_CONTRATISTA', 'ANUNCIO')
@@ -267,6 +283,10 @@ write.csv(df_contr15, file = "Contratos2015_csv_new.csv")
 df_contr14 <- read.csv("C:/Users/Bertold/Downloads/mexico_contratos/Contratos2014_csv.csv", header = TRUE, sep = ";")
 View(df_contr14)
 
+#alternatively with Latin-1 encoding
+df_contr14 <- read.csv("C:/Users/Bertold/Downloads/mexico_contratos/Contratos2014_csv.csv", header = TRUE, sep = ";", encoding = "Latin-1")
+
+
 #keeping the ones we need
 myvars <- c('DEPENDENCIA', 'CLAVEUC','CODIGO_EXPEDIENTE','TITULO_EXPEDIENTE','PLANTILLA_EXPEDIENTE','NUMERO_PROCEDIMIENTO','PROC_F_PUBLICACION','FECHA_APERTURA_PROPOSICIONES', 'TIPO_CONTRATACION', 'CODIGO_CONTRATO', 'TITULO_CONTRATO', 'FECHA_INICIO', 'FECHA_FIN', 'IMPORTE_CONTRATO', 'MONEDA', 'ESTATUS_CONTRATO', 'APORTACION_FEDERAL', 'FECHA_CELEBRACION', 'FOLIO_RUPC', 'PROVEEDOR_CONTRATISTA', 'ANUNCIO')
 df_contr14 <- df_contr14[myvars]
@@ -343,6 +363,10 @@ write.csv(df_contr14, file = "Contratos2014_csv_new.csv")
 #Contratos2013 - excel files were converted to csvs, so delimiter should be ";" instead of ","
 df_contr13 <- read.csv("C:/Users/Bertold/Downloads/mexico_contratos/Contratos2013_csv.csv", header = TRUE, sep = ";")
 View(df_contr13)
+
+#alternatively with Latin-1 encoding
+df_contr13 <- read.csv("C:/Users/Bertold/Downloads/mexico_contratos/Contratos2013_csv.csv", header = TRUE, sep = ";", encoding = "Latin-1")
+
 
 #keeping the ones we need
 myvars <- c('DEPENDENCIA', 'CLAVEUC','CODIGO_EXPEDIENTE','TITULO_EXPEDIENTE','PLANTILLA_EXPEDIENTE','NUMERO_PROCEDIMIENTO','PROC_F_PUBLICACION','FECHA_APERTURA_PROPOSICIONES', 'TIPO_CONTRATACION', 'CODIGO_CONTRATO', 'TITULO_CONTRATO', 'FECHA_INICIO', 'FECHA_FIN', 'IMPORTE_CONTRATO', 'MONEDA', 'ESTATUS_CONTRATO', 'APORTACION_FEDERAL', 'FECHA_CELEBRACION', 'FOLIO_RUPC', 'PROVEEDOR_CONTRATISTA', 'ANUNCIO')
@@ -445,6 +469,10 @@ write.csv(df_contr13, file = "Contratos2013_csv_new.csv")
 
 df_contr10_12 <- read.csv("C:/Users/Bertold/Downloads/mexico_contratos/Contratos2010_2012_csv.csv", header = TRUE, sep = ";")
 View(df_contr10_12)
+
+#alternatively with Latin-1 encoding
+df_contr10_12 <- read.csv("C:/Users/Bertold/Downloads/mexico_contratos/Contratos2010_2012_csv.csv", header = TRUE, sep = ";", encoding = "Latin-1")
+
 
 #keeping the ones we need
 myvars <- c('DEPENDENCIA', 'CLAVEUC','CODIGO_EXPEDIENTE','TITULO_EXPEDIENTE','PLANTILLA_EXPEDIENTE','NUMERO_PROCEDIMIENTO','PROC_F_PUBLICACION','FECHA_APERTURA_PROPOSICIONES', 'TIPO_CONTRATACION', 'CODIGO_CONTRATO', 'TITULO_CONTRATO', 'FECHA_INICIO', 'FECHA_FIN', 'IMPORTE_CONTRATO', 'MONEDA', 'ESTATUS_CONTRATO', 'APORTACION_FEDERAL', 'FECHA_CELEBRACION', 'FOLIO_RUPC', 'PROVEEDOR_CONTRATISTA', 'ANUNCIO')

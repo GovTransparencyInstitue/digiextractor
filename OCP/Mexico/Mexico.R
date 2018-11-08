@@ -1,7 +1,7 @@
 #clean all Contratos files
 
 #set directory
-setwd("C:/Users/Bertold/Downloads/mexico_contratos/")
+setwd("path/")
 getwd()
 
 #checking current memory limit
@@ -736,7 +736,7 @@ library(readr)
 #newly_generated_mexico_flat
 
 #rec_com_awa_items.csv
-df1 <- read_csv('rec_com_awa_items.csv')
+df1 <- read.csv("C:/Users/Bertold/Downloads/mexico_contratos/flattened-raw/rec_com/rec_com_awa_items.csv")
 
 #basic information on the database 
 class(df1)
@@ -744,18 +744,18 @@ dim(df1)
 str(df1)
 
 #rename variables
-names(df1) <- gsub(x = names(df1), pattern = "records/0/compiledRelease/awards/0/items/0/", replacement = "rec_com_aw_item_")
+names(df1) <- gsub(x = names(df1), pattern = "records.0.compiledRelease.awards.0.items.0.", replacement = "rec_com_aw_item_")
 
-names(df1)[names(df1) == 'records/0/compiledRelease/id'] <- 'rec_com_id'
-names(df1)[names(df1) == 'records/0/compiledRelease/awards/0/id'] <- 'rec_com_aw_id'
-names(df1)[names(df1) == 'rec_com_aw_item_unit/name'] <- 'rec_com_aw_item_unit_name'
-names(df1)[names(df1) == 'rec_com_aw_item_unit/value/amount'] <- 'rec_com_aw_item_unit_vamount'
-names(df1)[names(df1) == 'rec_com_aw_item_unit/value/currency'] <- 'rec_com_aw_item_unit_vcurr'
+names(df1)[names(df1) == 'records.0.compiledRelease.id'] <- 'rec_com_id'
+names(df1)[names(df1) == 'records.0.compiledRelease.awards.0.id'] <- 'rec_com_aw_id'
+names(df1)[names(df1) == 'rec_com_aw_item_unit.name'] <- 'rec_com_aw_item_unit_name'
+names(df1)[names(df1) == 'rec_com_aw_item_unit.value.amount'] <- 'rec_com_aw_item_unit_vamount'
+names(df1)[names(df1) == 'rec_com_aw_item_unit.value.currency'] <- 'rec_com_aw_item_unit_vcurr'
 names(df1)[names(df1) == 'rec_com_aw_item_description'] <- 'rec_com_aw_item_descr'
-names(df1)[names(df1) == 'rec_com_aw_item_classification/id'] <- 'rec_com_aw_item_class_id'
-names(df1)[names(df1) == 'rec_com_aw_item_classification/uri'] <- 'rec_com_aw_item_class_uri'
-names(df1)[names(df1) == 'rec_com_aw_item_classification/scheme'] <- 'rec_com_aw_item_class_scheme'
-names(df1)[names(df1) == 'rec_com_aw_item_classification/description'] <- 'rec_com_aw_item_class_descr'
+names(df1)[names(df1) == 'rec_com_aw_item_classification.id'] <- 'rec_com_aw_item_class_id'
+names(df1)[names(df1) == 'rec_com_aw_item_classification.uri'] <- 'rec_com_aw_item_class_uri'
+names(df1)[names(df1) == 'rec_com_aw_item_classification.scheme'] <- 'rec_com_aw_item_class_scheme'
+names(df1)[names(df1) == 'rec_com_aw_item_classification.description'] <- 'rec_com_aw_item_class_descr'
 
 names(df1)
 
@@ -777,7 +777,7 @@ length(unique(df1$rec_com_aw_id))
 length(unique(df1$rec_com_id))
 #many duplicates
 
-write.csv(df1, file = "C:/Users/Bertold/Downloads/only-raw-flattened/result/rec_com_awa_items_raw.csv", row.names = FALSE)
+write.csv(df1, file = "C:/Users/Bertold/Downloads/mexico_contratos/OECD/rec_com_awa_items_raw.csv", row.names = FALSE)
 
 #######################################
 
@@ -825,7 +825,7 @@ write.csv(df3, file = "C:/Users/Bertold/Downloads/only-raw-flattened/result/rec_
 #####################################
 
 #rec_com_awards.csv
-df4 <- read_csv('rec_com_awards.csv')
+df4 <- rec_com_awards
 view(df4)
 
 #basic information on the database
@@ -852,6 +852,17 @@ library(dplyr)
 aw_descr <- filter(df4, grepl("*:00Z",df4$rec_com_aw_descr))
 aw_descr$rec_com_aw_descr_copy <- aw_descr$rec_com_aw_descr
 
+aw_descr$rec_com_aw_descr_copy <- gsub(aw_descr$rec_com_aw_descr_copy, pattern = "T.*", replacement = "")
+aw_descr$rec_com_aw_descr_copy <- as.Date(aw_descr$rec_com_aw_descr_copy)
+
+aw_descr$rec_com_aw_ca_endDate <- as.Date(aw_descr$rec_com_aw_ca_endDate, tz = "UTC", "%Y-%m-%d")
+
+aw_descr$rec_com_aw_ca_startDate <- aw_descr$rec_com_aw_ca_endDate
+aw_descr$rec_com_aw_ca_endDate <- aw_descr$rec_com_aw_descr_copy
+aw_descr$rec_com_aw_descr[grepl("*:00Z", aw_descr$rec_com_aw_descr)] <- NA
+
+sum(is.na(aw_descr$rec_com_aw_descr))
+  
 aw_descr$rec_com_aw_descr <- aw_descr$rec_com_aw_ca_startDate
 aw_descr$rec_com_aw_ca_startDate <- aw_descr$rec_com_aw_descr_copy
 aw_descr$rec_com_aw_descr_copy <- NULL
@@ -859,6 +870,7 @@ aw_descr$rec_com_aw_descr_copy <- NULL
 #replace the original file with the corrected data by rec_Com_aw_id
 df4$rec_com_aw_descr[match(aw_descr$rec_com_aw_id, df4$rec_com_aw_id)] <- aw_descr$rec_com_aw_descr
 df4$rec_com_aw_ca_startDate[match(aw_descr$rec_com_aw_id, df4$rec_com_aw_id)] <- aw_descr$rec_com_aw_ca_startDate
+df4$rec_com_aw_ca_endDate[match(aw_descr$rec_com_aw_id, df4$rec_com_aw_id)] <- aw_descr$rec_com_aw_ca_endDate
 #looks fine
 
 #check and set types of variables 
@@ -901,7 +913,7 @@ length(unique(df4$rec_com_aw_id))
 #unique
 
 #save file
-write.csv(df4, file = "C:/Users/Bertold/Downloads/only-raw-flattened/result/rec_com_awards_raw.csv", row.names = FALSE)
+write.csv(df4, file = "C:/Users/Bertold/Downloads/only-raw-flattened/result/rec_com_awards_raw1019.csv", row.names = FALSE)
 
 ######################################
 
@@ -1649,4 +1661,4 @@ df_contr_ocds_ten$rec_com_ten_nrOfTenderers <- df_contr_ocds_ten$count
 df_contr_ocds_ten$count <- NULL
 
 #save file
-write.csv(df_contr_ocds_ten, file = "C:/Users/Bertold/Downloads/mexico_contratos/flattened-raw/raw_merge/df_contr_ocds_ten.csv", row.names = FALSE)
+write.csv(df_contr_ocds_ten, file = "path/filename.csv", row.names = FALSE)

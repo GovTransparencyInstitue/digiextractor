@@ -1,7 +1,7 @@
 #SECOP_II
 
 #set directory
-setwd("C:/Users/Bertold/Downloads/columbia-extra/merge")
+setwd("path")
 getwd()
 
 #checking current memory limit
@@ -2679,7 +2679,7 @@ write.csv(part8, file = "secopI_part8_c.csv", row.names = FALSE)
 #join SECOP I chunk files together  
 
 #set directory
-setwd("C:/Users/Bertold/Downloads/columbia-extra/merge")
+setwd("path")
 getwd()
 
 
@@ -2735,18 +2735,18 @@ write.csv(df_secopI_1518, file = "df_secopI_1518.csv", row.names = FALSE)
 #merge secop i sample with secop ii
 secop_I_IIs <- merge(df_secopI_1518, secopII_s, by = c("ca_id"), all = TRUE) 
 
-write.csv(secopI_IIs, file = "secopI_IIs.csv", row.names = FALSE)
+write.csv(secop_I_IIs, file = "secop_I_IIs", row.names = FALSE)
 
 #check missing rates
-sapply(secopI_II_sample, function(secopI_II_sample) sum(is.na(secopI_II_sample)))
-mean(is.na(secopI_II_sample$ten_endDate_x))
-mean(is.na(secopI_II_sample$ten_id))
-mean(is.na(secopI_II_sample$ten_startDate_x))
-mean(is.na(secopI_II_sample$aw_sup_id))
-mean(is.na(secopI_II_sample$aw_sup_name))
-mean(is.na(secopI_II_sample$ca_id))
-mean(is.na(secopI_II_sample$aw_id))
-mean(is.na(secopI_II_sample$aw_vamount))
+sapply(secop_I_IIs, function(secop_I_IIs) sum(is.na(secop_I_IIs)))
+mean(is.na(secop_I_IIs$ten_endDate_x))
+mean(is.na(secop_I_IIs$ten_id))
+mean(is.na(secop_I_IIs$ten_startDate_x))
+mean(is.na(secop_I_IIs$aw_sup_id))
+mean(is.na(secop_I_IIs$aw_sup_name))
+mean(is.na(secop_I_IIs$ca_id))
+mean(is.na(secop_I_IIs$aw_id))
+mean(is.na(secop_I_IIs$aw_vamount))
 
 #check missing rates by year
 library(dplyr)
